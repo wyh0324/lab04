@@ -7,7 +7,9 @@ import EventEditView from '@/views/event/EditView.vue'
 import EventLayoutView from '@/views/event/LayoutView.vue'
 import StudentsView from '@/views/StudentView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
-
+import nProgress from 'nprogress'
+import EventService from '@/services/EventService'
+import { useEventStore } from '@/stores/event'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -22,6 +24,43 @@ const router = createRouter({
       name: 'event-layout-view',
       component: EventLayoutView,
       props: true,
+      beforeEnter: (to) => {
+        const id = parseInt(to.params.id as string)
+        const eventStore = useEventStore()
+        return EventService.getEvent(id)
+          .then((response) => {
+            // need to setup the data for the event
+            eventStore.setEvent(response.data)
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 404) {
+              return {
+                name: '404-resource-view',
+                params: { resource: 'event' }
+              }
+            } else {
+              return { name: 'network-error-view' }
+            }
+          })
+      },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      beforeEnter: (to) => {
+        const id = parseInt(to.params.id as string)
+                return EventService.getEvent(id)
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                .then((response) => {
+                 // need to setup the data for the event
+                }).catch((error) => {
+                  if (error.response && error.response.status === 404) {
+                    return {
+                      name: '404-resource-view',
+                      params: { resource: 'event' }
+                    }
+                  } else{
+                    return { name: 'network-error-view' }
+                  }
+                }) 
+              },
       children: [
         {
           path: '',
@@ -58,6 +97,7 @@ const router = createRouter({
       component: NotFoundView,
       props: true,
     },
+    
     {
       path: '/:catchAll(.*)',
       name: 'not-found',
@@ -68,7 +108,15 @@ const router = createRouter({
       name: 'students',
       component: StudentsView,
     },
-  ],
+  ]
+    
 })
+router.beforeEach(() => {
+    nProgress.start()
+  })
+  
+  router.afterEach(() => {
+    nProgress.done()
+  })
 
 export default router
