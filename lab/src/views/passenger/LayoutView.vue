@@ -4,9 +4,18 @@
     <nav>
       <RouterLink :to="{ name: 'passenger-detail-view' }">Details</RouterLink>
       |
-      <RouterLink v-if="data.airline && data.airline.length > 0" :to="{ name: 'airline-detail-view', params: { id: route.params.id, airlineId: data.airline[0]._id } }">Airline</RouterLink>
+      <RouterLink
+        v-if="data.airline && data.airline.length > 0"
+        :to="{
+          name: 'airline-detail-view',
+          params: { id: route.params.id, airlineId: data.airline[0]._id },
+        }"
+        >Airline</RouterLink
+      >
       |
-      <RouterLink :to="{ name: 'passenger-register-view' }">Register</RouterLink>
+      <RouterLink :to="{ name: 'passenger-register-view' }"
+        >Register</RouterLink
+      >
       |
       <RouterLink :to="{ name: 'passenger-edit-view' }">Edit</RouterLink>
     </nav>
@@ -37,31 +46,35 @@ onMounted(() => {
   fetchPassengerData()
 })
 
-watch(() => route.params.airlineId, (newAirlineId) => {
-  if (newAirlineId) {
-    fetchAirlineData(newAirlineId as string)
-  }
-})
+watch(
+  () => route.params.airlineId,
+  newAirlineId => {
+    if (newAirlineId) {
+      fetchAirlineData(newAirlineId as string)
+    }
+  },
+)
 
 const fetchPassengerData = () => {
-  PassengerServices.getPassenger(route.params.id as string)
-    .then((responseData) => {
-      console.log('Data fetched:', responseData);
-      data.value = responseData;
+  PassengerServices.getPassenger(route.params.id as string).then(
+    responseData => {
+      console.log('Data fetched:', responseData)
+      data.value = responseData
       if (route.params.airlineId) {
         fetchAirlineData(route.params.airlineId as string)
       }
-    })
+    },
+  )
 }
 
 const fetchAirlineData = (airlineId: string) => {
   AirlineServices.getAirline(airlineId)
-    .then((airlineResponse) => {
-      console.log('Airline data fetched:', airlineResponse);
-      airline.value = airlineResponse;
+    .then(airlineResponse => {
+      console.log('Airline data fetched:', airlineResponse)
+      airline.value = airlineResponse
     })
-    .catch((error) => {
-      console.error('Error fetching airline data:', error);
+    .catch(error => {
+      console.error('Error fetching airline data:', error)
     })
 }
 </script>

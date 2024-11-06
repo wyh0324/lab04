@@ -3,11 +3,10 @@ import { toRefs, defineProps } from 'vue'
 import { type Data } from '@/types'
 
 const props = defineProps<{
-    data: Data
-    id: string
+  data: Data
+  id: string
 }>()
 const { data } = toRefs(props)
-
 </script>
 <template>
   <div v-if="data">
@@ -15,7 +14,12 @@ const { data } = toRefs(props)
     <p>trips {{ data.trips }}</p>
     <ul>
       <li v-for="airline in data.airline" :key="airline._id">
-        <router-link :to="{ name: 'airline-detail-view', params: { id: $route.params.id, airlineId: airline._id } }">
+        <router-link
+          :to="{
+            name: 'airline-detail-view',
+            params: { id: $route.params.id, airlineId: airline._id },
+          }"
+        >
           {{ airline.name }}
         </router-link>
       </li>

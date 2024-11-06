@@ -3,15 +3,17 @@ import { type Data } from '@/types'
 defineProps<{
   data: Data
 }>()
-
 </script>
 
 <template>
-<div class="data-class">
-    <RouterLink class="data-link" :to="{ name: 'passenger-detail-view', params: { id: data._id } }">
+  <div class="data-class">
+    <RouterLink
+      class="data-link"
+      :to="{ name: 'passenger-detail-view', params: { id: data._id } }"
+    >
       <div class="data-card">
         <h2>{{ data.name }}</h2>
-        <span>Trips :  {{ data.trips }}</span>
+        <span>Trips : {{ data.trips }}</span>
       </div>
     </RouterLink>
   </div>
@@ -32,7 +34,9 @@ defineProps<{
   border: 1px solid #39495c;
   margin-bottom: 18px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .data-card:hover {

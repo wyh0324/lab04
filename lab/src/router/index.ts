@@ -25,19 +25,19 @@ const router = createRouter({
       name: 'passenger-layout-view',
       component: PassengerLayoutView,
       props: true,
-      beforeEnter: (to) => {
-        const id = to.params._id as string;
+      beforeEnter: to => {
+        const id = to.params._id as string
         const eventStore = useEventStore()
         return PassengerServices.getPassenger(id)
-          .then((response) => {
+          .then(response => {
             // need to setup the data for the event
             eventStore.setEvent(response.data)
           })
-          .catch((error) => {
+          .catch(error => {
             if (error.response && error.response.status === 404) {
               return {
                 name: '404-resource-view',
-                params: { resource: 'event' }
+                params: { resource: 'event' },
               }
             } else {
               return { name: 'network-error-view' }
@@ -99,7 +99,7 @@ const router = createRouter({
     } else {
       return { top: 0 }
     }
-  }
+  },
 })
 router.beforeEach(() => {
   nProgress.start()
@@ -108,6 +108,5 @@ router.beforeEach(() => {
 router.afterEach(() => {
   nProgress.done()
 })
-
 
 export default router

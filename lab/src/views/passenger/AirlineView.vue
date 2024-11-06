@@ -12,6 +12,9 @@ const { airline } = toRefs(props)
     <h1>{{ airline.name }}</h1>
     <p>Country: {{ airline.country }}</p>
     <p>Headquarters: {{ airline.head_quaters }}</p>
-    <p>Website: <a :href="airline.website" target="_blank">{{ airline.website }}</a></p>
+    <p>
+      Website:
+      <a :href="airline.website" target="_blank">{{ airline.website }}</a>
+    </p>
   </div>
 </template>

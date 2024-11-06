@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { type Data } from '@/types'
-import {
-  ref, onMounted, computed, watch
-} from 'vue'
-import PassengerCard from '@/components/PassengerCard.vue';
-import PassengerServices from '@/services/PassengerServices';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, onMounted, computed, watch } from 'vue'
+import PassengerCard from '@/components/PassengerCard.vue'
+import PassengerServices from '@/services/PassengerServices'
+import { useRoute, useRouter } from 'vue-router'
 
 const datas = ref<Data[] | null>(null)
 const totalDatas = ref(0)
@@ -17,17 +15,21 @@ const router = useRouter()
 //const hasNexPage = computed(() => page.value <= totalDatas.value)
 
 const displayedData = computed(() => {
-  if (!datas.value) return [];
-  return datas.value.slice((page.value - 1) * 1, page.value);
-});
+  if (!datas.value) return []
+  return datas.value.slice((page.value - 1) * 1, page.value)
+})
 
 // 监听路由变化，更新页码
-watch(() => route.query.page, (newPage) => {
-  if (newPage) {
-    page.value = Number(newPage);
-    fetchPassengers();
-  }
-}, { immediate: true })
+watch(
+  () => route.query.page,
+  newPage => {
+    if (newPage) {
+      page.value = Number(newPage)
+      fetchPassengers()
+    }
+  },
+  { immediate: true },
+)
 
 onMounted(() => {
   fetchPassengers()
@@ -35,22 +37,21 @@ onMounted(() => {
 
 const fetchPassengers = () => {
   PassengerServices.getPassengers(1, page.value)
-    .then((response) => {
-      datas.value = response.data.data;
-      totalDatas.value = response.data.totalPassengers;
+    .then(response => {
+      datas.value = response.data.data
+      totalDatas.value = response.data.totalPassengers
     })
-    .catch((error) => {
-      console.error('There was an error!', error);
-    });
-};
+    .catch(error => {
+      console.error('There was an error!', error)
+    })
+}
 
 // 更新页面的方法
 const changePage = (newPage: number) => {
-  page.value = newPage;
-  router.push({ name: 'passenger-list-view', query: { page: newPage } });
-  fetchPassengers();
-};
-
+  page.value = newPage
+  router.push({ name: 'passenger-list-view', query: { page: newPage } })
+  fetchPassengers()
+}
 </script>
 
 <template>
@@ -61,11 +62,7 @@ const changePage = (newPage: number) => {
     </template>
   </div>
   <div class="pagination">
-    <button
-      id="page-prev"
-      :disabled="page <= 1"
-      @click="changePage(page - 1)"
-    >
+    <button id="page-prev" :disabled="page <= 1" @click="changePage(page - 1)">
       &#60; Prev Page
     </button>
     <button
@@ -102,5 +99,4 @@ const changePage = (newPage: number) => {
   opacity: 0.5; /* 禁用按钮时的样式 */
   cursor: not-allowed;
 }
-
 </style>
